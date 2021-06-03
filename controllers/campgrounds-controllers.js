@@ -1,5 +1,7 @@
 const Campground = require("../models/campground");
+const { validationResult } = require("express-validator");
 const ExpressError = require("../utils/ExpressError");
+const { cloudinary } = require("../cloudinary");
 
 const getAllCampgrounds = async (req, res, next) => {
   let campgrounds;
@@ -23,14 +25,28 @@ const getAllCampgrounds = async (req, res, next) => {
 };
 
 const createCampground = async (req, res, next) => {
-  const { title, description, location, image } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ExpressError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
+  const { title, description, location } = req.body;
 
   const campground = new Campground({
     title,
     description,
     location,
-    image,
+    // change if seeding
+    // temp only
+    author: "60af66b05089f72004a5a03b",
   });
+
+  campground.images = req.files.map((img) => ({
+    url: img.path,
+    filename: img.filename,
+  }));
 
   try {
     await campground.save();
@@ -70,6 +86,13 @@ const getCampgroundById = async (req, res, next) => {
 };
 
 const updateCampground = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ExpressError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
   let campground;
 
   try {
@@ -84,6 +107,12 @@ const updateCampground = async (req, res, next) => {
     return next(err);
   }
 
+  const imgs = req.files.map((img) => ({
+    url: img.path,
+    filename: img.filename,
+  }));
+  campground.images.push(...imgs);
+
   try {
     await campground.save();
   } catch (error) {
@@ -92,6 +121,19 @@ const updateCampground = async (req, res, next) => {
       500
     );
     return next(err);
+  }
+
+  const deleteImages = JSON.parse(req.body.deleteImages);
+
+  if (deleteImages) {
+    for (let filename of deleteImages) {
+      if (filename) {
+        await cloudinary.uploader.destroy(filename);
+      }
+    }
+    await campground.updateOne({
+      $pull: { images: { filename: { $in: deleteImages } } },
+    });
   }
 
   res.status(200).json({ message: "Campground successfully updated." });

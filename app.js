@@ -3,10 +3,12 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const express = require("express");
-// const cors = require("cors");
 const mongoose = require("mongoose");
+
+const userRoutes = require("./routes/users-routes");
 const campgroundRoutes = require("./routes/campgrounds-routes");
 const reviewRoutes = require("./routes/reviews-routes");
+
 const ExpressError = require("./utils/ExpressError");
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/pinoycamp";
@@ -33,18 +35,19 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 
   next();
 });
 
 app.use(express.json());
 
+app.use("/", userRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/reviews", reviewRoutes);
 
 app.use((req, res, next) => {
-  const error = new ExpressError("Page not found.", 404);
+  const error = new ExpressError("Could not found this route.", 404);
   throw error;
 });
 

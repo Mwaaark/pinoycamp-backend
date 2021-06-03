@@ -1,5 +1,6 @@
 const Campground = require("../models/campground");
 const Review = require("../models/review");
+const { validationResult } = require("express-validator");
 const ExpressError = require("../utils/ExpressError");
 
 const getAllReviewById = async (req, res, next) => {
@@ -31,6 +32,13 @@ const getAllReviewById = async (req, res, next) => {
 };
 
 const createReview = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new ExpressError("Invalid inputs passed, please check your data.", 422)
+    );
+  }
+
   let campground;
   let review;
 
