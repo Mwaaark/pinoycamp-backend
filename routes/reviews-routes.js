@@ -12,7 +12,10 @@ router
   .route("/")
   .get(getAllReviewById)
   .post(
-    [check("rating").isInt({ min: 1, max: 5 }), check("body").not().isEmpty()],
+    [
+      check("rating").isInt({ min: 1, max: 5 }),
+      check("body").isLength({ min: 5 }),
+    ],
     createReview
   );
 

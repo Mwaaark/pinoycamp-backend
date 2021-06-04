@@ -46,11 +46,11 @@ CampgroundSchema.post("findOneAndDelete", async (campground) => {
       },
     });
   }
-  if (campground.images) {
-    for (const img of campground.images) {
-      await cloudinary.uploader.destroy(img.filename);
-    }
-  }
+  // if (campground.images) {
+  //   for (const img of campground.images) {
+  //     await cloudinary.uploader.destroy(img.filename);
+  //   }
+  // }
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);

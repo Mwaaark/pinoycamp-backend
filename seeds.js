@@ -26,12 +26,12 @@ const seedDB = async () => {
       author: "60af66b05089f72004a5a03b",
       images: [
         {
-          url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622633258/PinoyCamp/vnijx6lgdfjzbudtyo6r.jpg",
-          filename: "PinoyCamp/vnijx6lgdfjzbudtyo6r",
+          url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622783080/PinoyCamp/xolu9xitmcu71zg3nigm.jpg",
+          filename: "PinoyCamp/xolu9xitmcu71zg3nigm",
         },
         {
-          url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622633258/PinoyCamp/i9sch3cya3q2k6ncrz5x.jpg",
-          filename: "PinoyCamp/i9sch3cya3q2k6ncrz5x",
+          url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622783080/PinoyCamp/orr0vwgyg5ai7bbbjvio.jpg",
+          filename: "PinoyCamp/orr0vwgyg5ai7bbbjvio",
         },
       ],
     });

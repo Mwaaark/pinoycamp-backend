@@ -10,7 +10,12 @@ const register = async (req, res, next) => {
     );
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    const err = new ExpressError("Passwords do not match.", 422);
+    return next(err);
+  }
 
   let existingUser;
 
