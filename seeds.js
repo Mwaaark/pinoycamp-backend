@@ -22,8 +22,12 @@ const seedDB = async () => {
       title: `Lorem ipsum dolor sit amet ${i + 1}`,
       description:
         "Sed iaculis volutpat arcu, sed fringilla ligula scelerisque vel. Curabitur dignissim dapibus scelerisque. In interdum massa sed tellus mattis, et aliquam libero varius. Vivamus sagittis pellentesque risus non lacinia. Duis augue metus, lacinia eget massa id, hendrerit suscipit turpis. Sed sodales leo at aliquam viverra.",
-      location: "Chocolate Hills",
-      author: "60af66b05089f72004a5a03b",
+      location: "Mayon Volcano, Albay",
+      geometry: {
+        type: "Point",
+        coordinates: [123.711204, 13.06527],
+      },
+      author: "60af66b05089f72004a5a03b", // user id
       images: [
         {
           url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622783080/PinoyCamp/xolu9xitmcu71zg3nigm.jpg",
@@ -38,7 +42,7 @@ const seedDB = async () => {
     for (let j = 0; j < 3; j++) {
       const review = new Review({
         body: `This is a review ${j + 1}`,
-        rating: j + 1,
+        rating: j + 3,
       });
 
       campground.reviews.push(review);

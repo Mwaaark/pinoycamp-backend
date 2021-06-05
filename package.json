@@ -11,6 +11,7 @@
   "author": "Mark Robert Bumatay",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.13.0",
     "axios": "^0.21.1",
     "cloudinary": "^1.25.2",
     "cors": "^2.8.5",

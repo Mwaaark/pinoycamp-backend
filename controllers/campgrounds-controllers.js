@@ -2,6 +2,9 @@ const Campground = require("../models/campground");
 const { validationResult } = require("express-validator");
 const ExpressError = require("../utils/ExpressError");
 const { cloudinary } = require("../cloudinary");
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 
 const getAllCampgrounds = async (req, res, next) => {
   let campgrounds;
@@ -34,14 +37,32 @@ const createCampground = async (req, res, next) => {
 
   const { title, description, location } = req.body;
 
+  let geoData;
+
+  try {
+    geoData = await geocoder
+      .forwardGeocode({
+        query: location,
+        limit: 1,
+      })
+      .send();
+  } catch (error) {
+    const err = new ExpressError(
+      "Something went wrong, location is not valid.",
+      500
+    );
+    return next(err);
+  }
+
   const campground = new Campground({
     title,
     description,
     location,
-    // change if seeding
-    // temp only
+    // temp only, will be removed if auth is added
     author: "60af66b05089f72004a5a03b",
   });
+
+  campground.geometry = geoData.body.features[0].geometry;
 
   campground.images = req.files.map((img) => ({
     url: img.path,
