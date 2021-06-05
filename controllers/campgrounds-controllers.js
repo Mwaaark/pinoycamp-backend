@@ -122,6 +122,31 @@ const updateCampground = async (req, res, next) => {
     );
   }
 
+  let geoData;
+
+  try {
+    geoData = await geocoder
+      .forwardGeocode({
+        query: req.body.location,
+        limit: 1,
+      })
+      .send();
+  } catch (error) {
+    const err = new ExpressError(
+      "Something went wrong, location is not valid.",
+      500
+    );
+    return next(err);
+  }
+
+  if (geoData.body.features.length < 1) {
+    const err = new ExpressError(
+      "Something went wrong, location not found.",
+      404
+    );
+    return next(err);
+  }
+
   let campground;
 
   try {
@@ -135,6 +160,8 @@ const updateCampground = async (req, res, next) => {
     );
     return next(err);
   }
+
+  campground.geometry = geoData.body.features[0].geometry;
 
   const imgs = req.files.map((img) => ({
     url: img.path,
