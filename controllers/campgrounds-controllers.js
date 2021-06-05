@@ -54,6 +54,14 @@ const createCampground = async (req, res, next) => {
     return next(err);
   }
 
+  if (geoData.body.features.length < 1) {
+    const err = new ExpressError(
+      "Something went wrong, location not found.",
+      404
+    );
+    return next(err);
+  }
+
   const campground = new Campground({
     title,
     description,
