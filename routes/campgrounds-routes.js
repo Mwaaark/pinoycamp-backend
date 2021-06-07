@@ -3,7 +3,7 @@ const router = express.Router();
 var multer = require("multer");
 const { storage } = require("../cloudinary/index");
 var upload = multer({ storage });
-
+const { isLoggedIn, isCampgroundAuthor } = require("../middleware");
 const { check } = require("express-validator");
 const {
   getAllCampgrounds,
@@ -17,6 +17,7 @@ router
   .route("/")
   .get(getAllCampgrounds)
   .post(
+    isLoggedIn,
     upload.array("images"),
     [
       check("title").not().isEmpty(),
@@ -30,6 +31,8 @@ router
   .route("/:id")
   .get(getCampgroundById)
   .put(
+    isLoggedIn,
+    isCampgroundAuthor,
     upload.array("images"),
     [
       check("title").not().isEmpty(),
@@ -38,6 +41,6 @@ router
     ],
     updateCampground
   )
-  .delete(deleteCampground);
+  .delete(isLoggedIn, isCampgroundAuthor, deleteCampground);
 
 module.exports = router;

@@ -27,7 +27,7 @@ const seedDB = async () => {
         type: "Point",
         coordinates: [123.711204, 13.06527],
       },
-      author: "60af66b05089f72004a5a03b", // user id
+      author: "60bc6b344fa02a3d581bfa50", // user id
       images: [
         {
           url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622783080/PinoyCamp/xolu9xitmcu71zg3nigm.jpg",
@@ -43,6 +43,7 @@ const seedDB = async () => {
       const review = new Review({
         body: `This is a review ${j + 1}`,
         rating: j + 3,
+        author: "60bc6b344fa02a3d581bfa50",
       });
 
       campground.reviews.push(review);

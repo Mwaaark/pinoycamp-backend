@@ -4,6 +4,10 @@ const Schema = mongoose.Schema;
 const ReviewSchema = new Schema({
   body: { type: String, required: true },
   rating: { type: Number, required: true },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   createdAt: { type: Date, default: Date.now, required: true },
 });
 

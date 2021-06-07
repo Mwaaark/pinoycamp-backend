@@ -7,7 +7,13 @@ const getAllReviewById = async (req, res, next) => {
   let campground;
 
   try {
-    campground = await Campground.findById(req.params.id).populate("reviews");
+    campground = await Campground.findById(req.params.id).populate({
+      path: "reviews",
+      populate: {
+        path: "author",
+        select: "name",
+      },
+    });
   } catch (error) {
     const err = new ExpressError(
       "Something went wrong, could not fetch data.",
@@ -61,6 +67,7 @@ const createReview = async (req, res, next) => {
   }
 
   review = new Review(req.body);
+  review.author = req.userData.userId;
   campground.reviews.push(review);
 
   try {
@@ -74,7 +81,12 @@ const createReview = async (req, res, next) => {
     return next(err);
   }
 
-  res.status(201).json({ review });
+  const result = await Review.findOne(review).populate({
+    path: "author",
+    select: "name",
+  });
+
+  res.status(201).json({ review: result });
 };
 
 const deleteReview = async (req, res, next) => {

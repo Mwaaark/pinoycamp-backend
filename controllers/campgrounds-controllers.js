@@ -66,8 +66,7 @@ const createCampground = async (req, res, next) => {
     title,
     description,
     location,
-    // temp only, will be removed if auth is added
-    author: "60af66b05089f72004a5a03b",
+    author: req.userData.userId,
   });
 
   campground.geometry = geoData.body.features[0].geometry;
@@ -94,7 +93,10 @@ const getCampgroundById = async (req, res, next) => {
   let campground;
 
   try {
-    campground = await Campground.findById(req.params.id);
+    campground = await Campground.findById(req.params.id).populate(
+      "author",
+      "-password"
+    );
   } catch (error) {
     const err = new ExpressError(
       "Something went wrong, could not fetch data.",
