@@ -27,7 +27,7 @@ const seedDB = async () => {
         type: "Point",
         coordinates: [123.711204, 13.06527],
       },
-      author: "60bc6b344fa02a3d581bfa50", // user id
+      author: "60bc6b344fa02a3d581bfa50",
       images: [
         {
           url: "https://res.cloudinary.com/dzfkuznwb/image/upload/v1622783080/PinoyCamp/xolu9xitmcu71zg3nigm.jpg",

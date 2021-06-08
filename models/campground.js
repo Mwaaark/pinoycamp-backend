@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Review = require("./review");
 const Schema = mongoose.Schema;
+const { cloudinary } = require("../cloudinary");
 
 const opts = { toJSON: { virtuals: true } };
 
@@ -55,11 +56,12 @@ CampgroundSchema.post("findOneAndDelete", async (campground) => {
       },
     });
   }
-  // if (campground.images) {
-  //   for (const img of campground.images) {
-  //     await cloudinary.uploader.destroy(img.filename);
-  //   }
-  // }
+  console.log(campground.images);
+  if (campground.images) {
+    for (let img of campground.images) {
+      await cloudinary.uploader.destroy(img.filename);
+    }
+  }
 });
 
 module.exports = mongoose.model("Campground", CampgroundSchema);
