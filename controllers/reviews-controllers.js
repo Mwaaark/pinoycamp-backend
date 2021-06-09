@@ -9,6 +9,7 @@ const getAllReviewById = async (req, res, next) => {
   try {
     campground = await Campground.findById(req.params.id).populate({
       path: "reviews",
+      options: { sort: { createdAt: -1 } },
       populate: {
         path: "author",
         select: "name",
@@ -29,10 +30,6 @@ const getAllReviewById = async (req, res, next) => {
     );
     return next(err);
   }
-
-  try {
-    reviews = await Review.find();
-  } catch (error) {}
 
   res.status(200).json({ reviews: campground.reviews });
 };

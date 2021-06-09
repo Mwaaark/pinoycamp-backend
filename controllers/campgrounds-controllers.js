@@ -10,7 +10,7 @@ const getAllCampgrounds = async (req, res, next) => {
   let campgrounds;
 
   try {
-    campgrounds = await Campground.find();
+    campgrounds = await Campground.find().sort({ createdAt: -1 });
   } catch (error) {
     const err = new ExpressError(
       "Something went wrong, could not fetch data.",
